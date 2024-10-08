@@ -6510,6 +6510,7 @@ impl From<CrawlRequest> for CrawlRequestPG {
     }
 }
 
+/// Options for setting up the crawl which will populate the dataset.
 #[derive(Debug, Serialize, Deserialize, Clone, ToSchema)]
 #[schema(example=json!({
     "site_url": "https://example.com",
@@ -6540,6 +6541,10 @@ pub struct CrawlOptions {
     pub exclude_tags: Option<Vec<String>>,
     /// Boost titles such that keyword matches in titles are prioritized in search results. Strongly recommended to leave this on. Defaults to true.
     pub boost_titles: Option<bool>,
+    /// Option for allowing the crawl to follow links to external websites.
+    pub allow_external_links: Option<bool>,
+    /// Option for allowing the crawl to navigate from a specific URL to previously linked pages.
+    pub allow_backward_links: Option<bool>,
     /// Options for including an openapi spec in the crawl
     pub scrape_options: Option<ScrapeOptions>,
 }
@@ -6577,6 +6582,8 @@ impl CrawlOptions {
             max_depth: self.max_depth.or(other.max_depth),
             boost_titles: self.boost_titles.or(other.boost_titles),
             scrape_options: self.scrape_options.clone(),
+            allow_external_links: self.allow_external_links.or(other.allow_external_links),
+            openapi_options: self.openapi_options.clone(),
         }
     }
 }
@@ -6625,8 +6632,8 @@ impl From<CrawlOptions> for FirecrawlCrawlRequest {
             max_depth: Some(crawl_options.max_depth.unwrap_or(10)),
             ignore_sitemap: None,
             limit: Some(crawl_options.limit.unwrap_or(1000)),
-            allow_external_links: None,
-            allow_backward_links: Some(true),
+            allow_external_links: Some(crawl_options.allow_external_links.unwrap_or(false)),
+            allow_backward_links: Some(crawl_options.allow_backward_links.unwrap_or(false)),
             scrape_options: Some(FirecrawlScraperOptions {
                 include_tags: crawl_options.include_tags,
                 exclude_tags: crawl_options.exclude_tags,
