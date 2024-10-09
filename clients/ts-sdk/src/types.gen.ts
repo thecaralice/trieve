@@ -432,7 +432,18 @@ export type CrawlOpenAPIOptions = {
     openapi_tag: string;
 };
 
+/**
+ * Options for setting up the crawl which will populate the dataset.
+ */
 export type CrawlOptions = {
+    /**
+     * Option for allowing the crawl to navigate from a specific URL to previously linked pages.
+     */
+    allow_backward_links?: (boolean) | null;
+    /**
+     * Option for allowing the crawl to follow links to external websites.
+     */
+    allow_external_links?: (boolean) | null;
     /**
      * Boost titles such that keyword matches in titles are prioritized in search results. Strongly recommended to leave this on. Defaults to true.
      */

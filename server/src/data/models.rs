@@ -6637,7 +6637,7 @@ impl From<CrawlOptions> for FirecrawlCrawlRequest {
             scrape_options: Some(FirecrawlScraperOptions {
                 include_tags: crawl_options.include_tags,
                 exclude_tags: crawl_options.exclude_tags,
-                formats: Some(vec!["html".to_string()]),
+                formats: Some(vec!["html".to_string(), "rawHtml".to_string()]),
                 wait_for: Some(1000),
             }),
         }
