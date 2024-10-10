@@ -7534,6 +7534,11 @@
             "description": "Specify the HTML tags, classes and ids to exclude from the response.",
             "nullable": true
           },
+          "ignore_sitemap": {
+            "type": "boolean",
+            "description": "Ignore the website sitemap when crawling, defaults to true.",
+            "nullable": true
+          },
           "include_paths": {
             "type": "array",
             "items": {

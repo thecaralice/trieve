@@ -457,6 +457,10 @@ export type CrawlOptions = {
      */
     exclude_tags?: Array<(string)> | null;
     /**
+     * Ignore the website sitemap when crawling, defaults to true.
+     */
+    ignore_sitemap?: (boolean) | null;
+    /**
      * URL Patterns to include in the crawl
      */
     include_paths?: Array<(string)> | null;
