@@ -13,7 +13,9 @@ import { ErrorMsg, ValidateErrors, ValidateFn } from "../../utils/validation";
 import { cn } from "shared/utils";
 
 export const defaultCrawlOptions: CrawlOptions = {
-  boost_titles: false,
+  boost_titles: true,
+  allow_external_links: false,
+  ignore_sitemap: false,
   exclude_paths: [],
   exclude_tags: [],
   include_paths: [],
@@ -338,38 +340,58 @@ const RealCrawlingSettings = (props: RealCrawlingSettingsProps) => {
           checked={isOpenAPI()}
           class="h-4 w-4 rounded border border-neutral-300 bg-neutral-100 p-1 accent-magenta-400 dark:border-neutral-900 dark:bg-neutral-800"
           type="checkbox"
-          checked={options.boost_titles ?? true}
-          onChange={(e) => {
-            setOptions("boost_titles", e.currentTarget.checked);
-          }}
         />
       </div>
 
-      <div class="flex items-center gap-2 py-2 pt-4">
+      <div
+        classList={{
+          "flex items-center gap-2 py-2 pt-4": true,
+          "opacity-40": isShopify(),
+        }}
+      >
         <label class="block">Allow External Links</label>
         <input
           class="h-4 w-4 rounded border border-neutral-300 bg-neutral-100 p-1 accent-magenta-400 dark:border-neutral-900 dark:bg-neutral-800"
           type="checkbox"
-          checked={options.allow_external_links ?? true}
+          disabled={isShopify()}
+          checked={options.allow_external_links ?? false}
           onChange={(e) => {
             setOptions("allow_external_links", e.currentTarget.checked);
           }}
         />
       </div>
 
-      <div class={cn("flex gap-4 pt-2", isShopify() && "opacity-40")}>
+      <div
+        classList={{
+          "flex items-center gap-2 py-2 pt-4": true,
+          "opacity-40": isShopify(),
+        }}
+      >
+        <label class="block">Ignore Sitemap</label>
+        <input
+          class="h-4 w-4 rounded border border-neutral-300 bg-neutral-100 p-1 accent-magenta-400 dark:border-neutral-900 dark:bg-neutral-800"
+          type="checkbox"
+          disabled={isShopify()}
+          checked={options.ignore_sitemap ?? true}
+          onChange={(e) => {
+            setOptions("ignore_sitemap", e.currentTarget.checked);
+          }}
+        />
+      </div>
+
+      <div classList={{ "flex gap-4 pt-2": true, "opacity-40": isShopify() }}>
         <div>
           <label class="block" for="">
             Page Limit
           </label>
           <input
+            class="block max-w-[100px] rounded border border-neutral-300 px-3 py-1.5 shadow-sm placeholder:text-neutral-400 focus:outline-magenta-500 sm:text-sm sm:leading-6"
+            type="number"
             disabled={isShopify()}
             value={options.limit || "0"}
             onInput={(e) => {
               setOptions("limit", parseInt(e.currentTarget.value));
             }}
-            class="block max-w-[100px] rounded border border-neutral-300 px-3 py-1.5 shadow-sm placeholder:text-neutral-400 focus:outline-magenta-500 sm:text-sm sm:leading-6"
-            type="number"
           />
           <Error error={errors.limit} />
         </div>
